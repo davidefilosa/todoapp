@@ -1,7 +1,2 @@
-make pizza
-code
-learn
-have fun
-work
-study
-
+Study
+Work
