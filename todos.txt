@@ -1,6 +1,6 @@
 learning
 cooking
-codig
+coding
 make pizza
 go to market
 master python
