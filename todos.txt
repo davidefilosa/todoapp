@@ -1,1 +1,4 @@
 make pizza
+code
+learn
+have fun
