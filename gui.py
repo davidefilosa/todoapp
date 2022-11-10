@@ -1,8 +1,11 @@
 import functions
-
 import PySimpleGUI as sg
+import time
+
+sg.theme('Blue Mono')
 
 label = sg.Text('Type a to-do')
+clock = sg.Text('', key='clock')
 input_box = sg.InputText(tooltip='Enter a to-do', key='todo')
 add_button = sg.Button('Add')
 list_box = sg.Listbox(values=functions.get_todos(), key='todos',
@@ -11,7 +14,8 @@ list_box = sg.Listbox(values=functions.get_todos(), key='todos',
 edit_button = sg.Button('Edit')
 complete_button = sg.Button('Complete')
 exit_button = sg.Button('Exit')
-layout = [[label],
+layout = [[clock],
+          [label],
           [input_box, add_button],
           [list_box, edit_button, complete_button],
           [exit_button]]
@@ -20,8 +24,8 @@ window = sg.Window(title='My To-Do App',
                    layout=layout,
                    font=('Helvetica', 20))
 while True:
-    event, values = window.read()
-    print(event, values)
+    event, values = window.read(timeout=200)
+    window['clock'].update(value=time.strftime('%b %d, %Y %H:%M:%S'))
     match event:
         case 'Add':
             todos = functions.get_todos()
@@ -31,21 +35,27 @@ while True:
             window['todos'].update(values=todos)
 
         case 'Edit':
-            todo_to_edit = values['todos'][0]
-            new_todo = values['todo'] + '\n'
-            todos = functions.get_todos()
-            i = todos.index(todo_to_edit)
-            todos[i] = new_todo
-            functions.write_todos(todos)
-            window['todos'].update(values=todos)
+            try:
+                todo_to_edit = values['todos'][0]
+                new_todo = values['todo'] + '\n'
+                todos = functions.get_todos()
+                i = todos.index(todo_to_edit)
+                todos[i] = new_todo
+                functions.write_todos(todos)
+                window['todos'].update(values=todos)
+            except IndexError:
+                sg.Popup('Please select an item first', font=('Helvetica', 20))
         case 'Complete':
-            todo_to_complete = values['todos'][0]
-            todos = functions.get_todos()
-            i = todos.index(todo_to_complete)
-            todos.pop(i)
-            functions.write_todos(todos)
-            window['todos'].update(values=todos)
-            window['todo'].update(value="")
+            try:
+                todo_to_complete = values['todos'][0]
+                todos = functions.get_todos()
+                i = todos.index(todo_to_complete)
+                todos.pop(i)
+                functions.write_todos(todos)
+                window['todos'].update(values=todos)
+                window['todo'].update(value="")
+            except IndexError:
+                sg.Popup('Please select an item first', font=('Helvetica', 20))
         case 'todos':
             window['todo'].update(value=values['todos'][0].strip('\n'))
         case 'Exit':
