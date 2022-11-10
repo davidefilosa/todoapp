@@ -1,7 +1,3 @@
 learning
 cooking
-coding
-make pizza
-go to market
-master python
 make pizza
