@@ -1,8 +1,7 @@
 learning
 cooking
-coding
-make soup
+codig
+make pizza
 go to market
-test
-test
-go home
+master python
+make pizza
